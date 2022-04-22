@@ -93,6 +93,7 @@ import {
   LINT_TOOLTIP_CLASS,
   LINT_TOOLTIP_JUSTIFIFIED_LEFT_CLASS,
 } from "./constants";
+import { getAutoIndentShortcutKey } from "./utils/autoIndentUtils";
 
 interface ReduxStateProps {
   dynamicData: DataTree;
@@ -231,6 +232,21 @@ class CodeEditor extends Component<Props, State> {
       if (this.props.tabBehaviour === TabBehaviour.INPUT) {
         options.extraKeys["Tab"] = false;
       }
+
+      const isReadOnly = !this.props.input.onChange || this.props.disabled;
+      if (this.props.showLineNumbers && !isReadOnly) {
+        const autoIndentKey = getAutoIndentShortcutKey();
+        console.log("auto indent keys", autoIndentKey);
+        options.extraKeys[autoIndentKey] = (editor) => {
+          editor.eachLine((line) => {
+            const lineNumber = this.editor.getLineNumber(line);
+            if (!!lineNumber) {
+              editor.indentLine(lineNumber);
+            }
+          });
+        };
+      }
+
       if (this.props.folding) {
         options.foldGutter = true;
         options.gutters = ["CodeMirror-linenumbers", "CodeMirror-foldgutter"];

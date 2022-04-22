@@ -2,6 +2,7 @@
 const commonlocators = require("../../../../locators/commonlocators.json");
 const dsl = require("../../../../fixtures/MultipleWidgetDsl.json");
 const globalSearchLocators = require("../../../../locators/GlobalSearch.json");
+const { isMacOrIOS } = require("../../../../../src/utils/helpers");
 
 describe("GlobalSearch", function() {
   before(() => {
@@ -23,8 +24,8 @@ describe("GlobalSearch", function() {
   it("1. showsAndHidesUsingKeyboardShortcuts", () => {
     // wait for the page to load
     cy.get(commonlocators.canvas);
-    const isMac = Cypress.platform === "darwin";
-    if (isMac) {
+    const isMacOrIOS = Cypress.platform === "darwin";
+    if (isMacOrIOS) {
       cy.get("body").type("{cmd}{k}");
       cy.get(commonlocators.globalSearchModal);
       cy.get("body").type("{esc}");
