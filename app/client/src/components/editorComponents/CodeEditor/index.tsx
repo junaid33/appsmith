@@ -97,6 +97,7 @@ import {
   getAutoIndentShortcutKey,
   autoIndentCode,
 } from "./utils/autoIndentUtils";
+import { getMoveCursorLeftKey } from "./utils/cursorLeftMovement";
 
 interface ReduxStateProps {
   dynamicData: DataTree;
@@ -231,7 +232,11 @@ class CodeEditor extends Component<Props, State> {
         options.scrollbarStyle = "null";
       }
 
-      options.extraKeys = {};
+      const moveCursorLeftKey = getMoveCursorLeftKey();
+      options.extraKeys = {
+        [moveCursorLeftKey]: "goLineStartSmart",
+      };
+
       if (this.props.tabBehaviour === TabBehaviour.INPUT) {
         options.extraKeys["Tab"] = false;
       }
